@@ -1,0 +1,1240 @@
+/* Futuristic Dark Theme with Glassmorphism */
+:root {
+    --primary-neon: #00ff88;
+    --secondary-neon: #00d4ff;
+    --accent-purple: #8b5cf6;
+    --dark-bg: #0a0a0a;
+    --dark-surface: #1a1a1a;
+    --dark-elevated: #2a2a2a;
+    --glass-bg: rgba(255, 255, 255, 0.1);
+    --glass-border: rgba(255, 255, 255, 0.2);
+    --text-primary: #ffffff;
+    --text-secondary: #b0b0b0;
+    --text-muted: #666666;
+    --danger-neon: #ff0055;
+    --warning-neon: #ffaa00;
+    --success-neon: #00ff88;
+    --gradient-primary: linear-gradient(135deg, #00ff88 0%, #00d4ff 50%, #8b5cf6 100%);
+    --gradient-dark: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #2a2a2a 100%);
+    --gradient-glass: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+    --shadow-neon: 0 0 20px rgba(0, 255, 136, 0.3);
+    --shadow-dark: 0 8px 32px rgba(0, 0, 0, 0.8);
+    --shadow-glass: 0 8px 32px rgba(255, 255, 255, 0.1);
+    --blur-amount: 15px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+    line-height: 1.6;
+    color: var(--text-primary);
+    background: var(--dark-bg);
+    background-image: 
+        radial-gradient(circle at 20% 80%, rgba(0, 255, 136, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(0, 212, 255, 0.05) 0%, transparent 50%);
+    background-attachment: fixed;
+    min-height: 100vh;
+}
+
+/* Glassmorphism Navigation */
+.navbar {
+    background: var(--glass-bg) !important;
+    backdrop-filter: blur(var(--blur-amount));
+    border-bottom: 1px solid var(--glass-border);
+    padding: 1.5rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: var(--shadow-glass);
+}
+
+.navbar-brand {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--primary-neon) !important;
+    text-shadow: 0 0 10px var(--primary-neon);
+    letter-spacing: -0.5px;
+}
+
+.navbar-nav .nav-link {
+    color: var(--text-primary) !important;
+    font-weight: 600;
+    margin: 0 0.5rem;
+    padding: 0.8rem 1.5rem !important;
+    border-radius: 15px;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.navbar-nav .nav-link::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: var(--gradient-primary);
+    transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: -1;
+}
+
+.navbar-nav .nav-link:hover::before,
+.navbar-nav .nav-link.active::before {
+    left: 0;
+}
+
+.navbar-nav .nav-link:hover {
+    color: var(--dark-bg) !important;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-neon);
+}
+
+/* Futuristic Hero Section */
+.hero-section {
+    background: var(--gradient-dark);
+    color: var(--text-primary);
+    padding: 8rem 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        linear-gradient(45deg, transparent 30%, rgba(0, 255, 136, 0.1) 50%, transparent 70%),
+        linear-gradient(-45deg, transparent 30%, rgba(139, 92, 246, 0.1) 50%, transparent 70%);
+    animation: heroPattern 8s ease-in-out infinite;
+}
+
+@keyframes heroPattern {
+    0%, 100% { transform: translateX(-20px) translateY(-20px); }
+    50% { transform: translateX(20px) translateY(20px); }
+}
+
+.hero-section h1 {
+    font-weight: 900;
+    background: var(--gradient-primary);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: none;
+    margin-bottom: 2rem;
+    position: relative;
+    z-index: 1;
+}
+
+.hero-section p {
+    font-size: 1.3rem;
+    font-weight: 300;
+    color: var(--text-secondary);
+    position: relative;
+    z-index: 1;
+}
+
+.hero-section .input-group {
+    position: relative;
+    z-index: 1;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.hero-section .form-control {
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--blur-amount));
+    border: 1px solid var(--glass-border);
+    color: var(--text-primary);
+    padding: 1.5rem 2rem;
+    font-size: 1.1rem;
+    border-radius: 25px 0 0 25px;
+}
+
+.hero-section .form-control::placeholder {
+    color: var(--text-muted);
+}
+
+.hero-section .btn {
+    background: var(--gradient-primary);
+    border: none;
+    border-radius: 0 25px 25px 0;
+    padding: 1.5rem 2.5rem;
+    font-weight: 700;
+    color: var(--dark-bg);
+    transition: all 0.4s ease;
+}
+
+.hero-section .btn:hover {
+    transform: scale(1.05);
+    box-shadow: var(--shadow-neon);
+}
+
+/* Glassmorphism Restaurant Cards */
+.restaurant-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--blur-amount));
+    border: 1px solid var(--glass-border);
+    border-radius: 25px;
+    overflow: hidden;
+    margin-bottom: 2rem;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+}
+
+.restaurant-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--gradient-primary);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: -1;
+}
+
+.restaurant-card:hover {
+    transform: translateY(-15px) rotateX(5deg);
+    box-shadow: var(--shadow-neon);
+    border-color: var(--primary-neon);
+}
+
+.restaurant-card:hover::before {
+    opacity: 0.1;
+}
+
+.restaurant-card .card-body {
+    padding: 2rem;
+    position: relative;
+    z-index: 1;
+}
+
+.restaurant-card .card-footer {
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--blur-amount));
+    border-top: 1px solid var(--glass-border);
+    padding: 1.5rem 2rem;
+}
+
+/* Enhanced Button System - Fix all button variants */
+.btn {
+    padding: 0.8rem 1.8rem;
+    border-radius: 15px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 2px solid transparent;
+    position: relative;
+    overflow: hidden;
+    text-transform: none;
+    letter-spacing: 0.5px;
+}
+
+.btn-sm {
+    padding: 0.5rem 1.2rem;
+    font-size: 0.8rem;
+    border-radius: 12px;
+}
+
+.btn-lg {
+    padding: 1.2rem 2.5rem;
+    font-size: 1.1rem;
+    border-radius: 20px;
+}
+
+/* Primary Button */
+.btn-primary {
+    background: var(--gradient-primary);
+    border: 2px solid transparent;
+    color: var(--dark-bg) !important;
+    font-weight: 700;
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-neon);
+    color: var(--dark-bg) !important;
+    border-color: var(--primary-neon);
+}
+
+/* Outline Primary Button */
+.btn-outline-primary {
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--blur-amount));
+    border: 2px solid var(--primary-neon);
+    color: var(--primary-neon) !important;
+    font-weight: 600;
+}
+
+.btn-outline-primary:hover {
+    background: var(--primary-neon);
+    border-color: var(--primary-neon);
+    color: var(--dark-bg) !important;
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-neon);
+}
+
+/* Outline Info Button */
+.btn-outline-info {
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--blur-amount));
+    border: 2px solid var(--secondary-neon);
+    color: var(--secondary-neon) !important;
+    font-weight: 600;
+}
+
+.btn-outline-info:hover {
+    background: var(--secondary-neon);
+    border-color: var(--secondary-neon);
+    color: var(--dark-bg) !important;
+    transform: translateY(-3px);
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+}
+
+/* Outline Danger Button */
+.btn-outline-danger {
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--blur-amount));
+    border: 2px solid var(--danger-neon);
+    color: var(--danger-neon) !important;
+    font-weight: 600;
+}
+
+.btn-outline-danger:hover {
+    background: var(--danger-neon);
+    border-color: var(--danger-neon);
+    color: var(--text-primary) !important;
+    transform: translateY(-3px);
+    box-shadow: 0 0 20px rgba(255, 0, 85, 0.5);
+}
+
+/* Outline Secondary Button */
+.btn-outline-secondary {
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--blur-amount));
+    border: 2px solid var(--text-secondary);
+    color: var(--text-secondary) !important;
+    font-weight: 600;
+}
+
+.btn-outline-secondary:hover {
+    background: var(--text-secondary);
+    border-color: var(--text-secondary);
+    color: var(--dark-bg) !important;
+    transform: translateY(-3px);
+    box-shadow: 0 0 20px rgba(176, 176, 176, 0.3);
+}
+
+/* Warning Button */
+.btn-warning {
+    background: linear-gradient(135deg, var(--warning-neon), #ffcc00);
+    border: 2px solid transparent;
+    color: var(--dark-bg) !important;
+    font-weight: 700;
+}
+
+.btn-warning:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 20px rgba(255, 170, 0, 0.5);
+    color: var(--dark-bg) !important;
+    border-color: var(--warning-neon);
+}
+
+/* Outline Warning Button */
+.btn-outline-warning {
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--blur-amount));
+    border: 2px solid var(--warning-neon);
+    color: var(--warning-neon) !important;
+    font-weight: 600;
+}
+
+.btn-outline-warning:hover {
+    background: var(--warning-neon);
+    border-color: var(--warning-neon);
+    color: var(--dark-bg) !important;
+    transform: translateY(-3px);
+    box-shadow: 0 0 20px rgba(255, 170, 0, 0.5);
+}
+
+/* Button Group Spacing */
+.btn-group .btn,
+.d-flex .btn {
+    margin-right: 0.5rem;
+}
+
+.d-flex .btn:last-child {
+    margin-right: 0;
+}
+
+/* Button gap utility */
+.gap-2 .btn {
+    margin-right: 0 !important;
+}
+
+/* Disabled button states */
+.btn:disabled,
+.btn.disabled {
+    opacity: 0.5;
+    transform: none !important;
+    box-shadow: none !important;
+    cursor: not-allowed;
+}
+
+/* Focus states for accessibility */
+.btn:focus {
+    outline: 2px solid var(--primary-neon);
+    outline-offset: 3px;
+}
+
+/* Button icon spacing */
+.btn i {
+    margin-right: 0.5rem;
+}
+
+.btn i:only-child {
+    margin-right: 0;
+}
+
+/* Glassmorphism Form Controls */
+.form-control, .form-select {
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--blur-amount));
+    border: 1px solid var(--glass-border);
+    border-radius: 15px;
+    color: var(--text-primary);
+    padding: 1rem 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.form-control::placeholder {
+    color: var(--text-muted);
+}
+
+.form-control:focus, .form-select:focus {
+    background: var(--glass-bg);
+    border-color: var(--primary-neon);
+    box-shadow: 0 0 0 0.2rem rgba(0, 255, 136, 0.25);
+    color: var(--text-primary);
+}
+
+/* Fix select dropdown options visibility */
+.form-select {
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--blur-amount));
+    border: 1px solid var(--glass-border);
+    border-radius: 15px;
+    color: var(--text-primary);
+    padding: 1rem 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.form-select option {
+    background: var(--dark-surface) !important;
+    color: var(--text-primary) !important;
+    padding: 0.5rem;
+}
+
+.form-select:focus {
+    background: var(--glass-bg);
+    border-color: var(--primary-neon);
+    box-shadow: 0 0 0 0.2rem rgba(0, 255, 136, 0.25);
+    color: var(--text-primary);
+}
+
+/* Webkit browsers (Chrome, Safari, Edge) select styling */
+.form-select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='%2300ff88' viewBox='0 0 16 16'%3e%3cpath d='m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 16px 12px;
+    padding-right: 3rem;
+}
+
+/* Firefox select styling */
+@-moz-document url-prefix() {
+    .form-select {
+        background-image: none;
+        padding-right: 1.5rem;
+    }
+}
+
+/* Modal select specific styling */
+.modal .form-select {
+    background: var(--dark-elevated);
+    border: 2px solid var(--glass-border);
+    color: var(--text-primary);
+}
+
+.modal .form-select option {
+    background: var(--dark-elevated) !important;
+    color: var(--text-primary) !important;
+}
+
+.modal .form-select:focus {
+    background: var(--dark-elevated);
+    border-color: var(--primary-neon);
+    box-shadow: 0 0 0 0.2rem rgba(0, 255, 136, 0.25);
+}
+
+/* Booking modal specific time select */
+#booking-time,
+#edit-time {
+    background: var(--dark-elevated) !important;
+    color: var(--text-primary) !important;
+    border: 2px solid var(--glass-border);
+}
+
+#booking-time option,
+#edit-time option {
+    background: var(--dark-elevated) !important;
+    color: var(--text-primary) !important;
+    padding: 0.8rem;
+    font-weight: 500;
+}
+
+#booking-time:focus,
+#edit-time:focus {
+    background: var(--dark-elevated) !important;
+    border-color: var(--primary-neon);
+    box-shadow: 0 0 0 0.2rem rgba(0, 255, 136, 0.25);
+}
+
+/* For browsers that don't support backdrop-filter well */
+@supports not (backdrop-filter: blur(15px)) {
+    .form-select {
+        background: var(--dark-elevated);
+    }
+    
+    .modal .form-select {
+        background: var(--dark-surface);
+    }
+}
+
+/* Glassmorphism Search Filters */
+.search-filters {
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--blur-amount));
+    border: 1px solid var(--glass-border);
+    border-radius: 25px;
+    padding: 2.5rem;
+    margin-bottom: 3rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.search-filters::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--gradient-primary);
+}
+
+/* Neon Food Items */
+.food-item {
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--blur-amount));
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 2rem;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.food-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 255, 136, 0.1), transparent);
+    transition: left 0.6s ease;
+}
+
+.food-item:hover::before {
+    left: 100%;
+}
+
+.food-item:hover {
+    border-color: var(--primary-neon);
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-neon);
+}
+
+/* Neon Badges */
+.badge {
+    padding: 0.6rem 1.2rem;
+    border-radius: 15px;
+    font-weight: 700;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.badge.bg-secondary {
+    background: var(--glass-bg) !important;
+    backdrop-filter: blur(var(--blur-amount));
+    border: 1px solid var(--glass-border);
+    color: var(--text-primary);
+}
+
+.badge.bg-primary {
+    background: var(--gradient-primary) !important;
+    color: var(--dark-bg);
+    box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
+}
+
+.badge.bg-success {
+    background: linear-gradient(135deg, var(--success-neon), #00cc77) !important;
+    color: var(--dark-bg);
+}
+
+/* Neon Rating Stars */
+.rating-stars {
+    color: var(--warning-neon);
+    font-size: 1.2rem;
+    filter: drop-shadow(0 0 5px var(--warning-neon));
+}
+
+/* Animated Like Button */
+.like-btn {
+    border: none;
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--blur-amount));
+    font-size: 1.5rem;
+    padding: 0.8rem;
+    border-radius: 50%;
+    border: 1px solid var(--glass-border);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.like-btn:hover {
+    background: var(--danger-neon);
+    border-color: var(--danger-neon);
+    color: var(--text-primary) !important;
+    transform: scale(1.2) rotate(15deg);
+    box-shadow: 0 0 20px var(--danger-neon);
+}
+
+.like-btn.text-danger {
+    color: var(--danger-neon) !important;
+    background: rgba(255, 0, 85, 0.1);
+    border-color: var(--danger-neon);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); box-shadow: 0 0 20px var(--danger-neon); }
+}
+
+/* Futuristic Modals */
+.modal-content {
+    background: var(--dark-surface);
+    border: 1px solid var(--glass-border);
+    border-radius: 25px;
+    backdrop-filter: blur(var(--blur-amount));
+    box-shadow: var(--shadow-dark);
+}
+
+.modal-header {
+    border-radius: 25px 25px 0 0;
+    padding: 2rem;
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.modal-header.bg-warning {
+    background: var(--gradient-primary) !important;
+    color: var(--dark-bg);
+}
+
+.modal-header.bg-primary {
+    background: var(--dark-elevated) !important;
+    color: var(--text-primary);
+}
+
+.modal-body {
+    padding: 2.5rem;
+    color: var(--text-primary);
+}
+
+.modal-footer {
+    border-radius: 0 0 25px 25px;
+    padding: 2rem;
+    border-top: 1px solid var(--glass-border);
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--blur-amount));
+}
+
+/* Glassmorphism Cards for Auth */
+.card.border-0.shadow-lg {
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--blur-amount));
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 30px;
+    box-shadow: var(--shadow-dark);
+    position: relative;
+    overflow: hidden;
+}
+
+.card.border-0.shadow-lg::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--gradient-primary);
+}
+
+/* Neon Pagination */
+.pagination .page-link {
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--blur-amount));
+    border: 1px solid var(--glass-border);
+    color: var(--text-primary);
+    border-radius: 15px;
+    font-weight: 600;
+    margin: 0 0.3rem;
+    padding: 0.8rem 1.2rem;
+    transition: all 0.4s ease;
+}
+
+.pagination .page-link:hover {
+    background: var(--primary-neon);
+    border-color: var(--primary-neon);
+    color: var(--dark-bg);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-neon);
+}
+
+.pagination .page-item.active .page-link {
+    background: var(--gradient-primary);
+    border-color: var(--primary-neon);
+    color: var(--dark-bg);
+    box-shadow: var(--shadow-neon);
+}
+
+/* Futuristic Footer */
+footer {
+    background: var(--dark-surface) !important;
+    border-top: 2px solid var(--primary-neon);
+    color: var(--text-primary);
+    position: relative;
+}
+
+footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--gradient-primary);
+    animation: glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+    from { box-shadow: 0 0 5px var(--primary-neon); }
+    to { box-shadow: 0 0 20px var(--primary-neon); }
+}
+
+/* Neon Booking Cards */
+.booking-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--blur-amount));
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 20px;
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.booking-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: var(--gradient-primary);
+    animation: borderGlow 3s ease-in-out infinite;
+}
+
+@keyframes borderGlow {
+    0%, 100% { box-shadow: 0 0 5px var(--primary-neon); }
+    50% { box-shadow: 0 0 15px var(--primary-neon); }
+}
+
+.booking-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-neon);
+    border-color: var(--primary-neon);
+}
+
+/* Neon Alerts */
+.alert {
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--blur-amount));
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.alert-danger {
+    border-color: var(--danger-neon);
+    color: var(--danger-neon);
+    box-shadow: 0 0 15px rgba(255, 0, 85, 0.2);
+}
+
+.alert-warning {
+    border-color: var(--warning-neon);
+    color: var(--warning-neon);
+    box-shadow: 0 0 15px rgba(255, 170, 0, 0.2);
+}
+
+/* Fix all text visibility issues */
+h1, h2, h3, h4, h5, h6 {
+    color: var(--text-primary) !important;
+}
+
+p, span, div, small {
+    color: var(--text-primary);
+}
+
+.text-muted {
+    color: var(--text-secondary) !important;
+}
+
+/* Card text fixes */
+.card-title {
+    color: var(--text-primary) !important;
+    font-weight: 700;
+}
+
+.card-text {
+    color: var(--text-secondary) !important;
+}
+
+.card-body h5,
+.card-body p,
+.card-body span,
+.card-body div {
+    color: var(--text-primary) !important;
+}
+
+.card-footer small {
+    color: var(--text-secondary) !important;
+}
+
+/* Restaurant card specific fixes */
+.restaurant-card .card-title {
+    color: var(--text-primary) !important;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.restaurant-card .card-text {
+    color: var(--text-secondary) !important;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.restaurant-card .rating-stars {
+    color: var(--warning-neon) !important;
+}
+
+.restaurant-card .rating-stars .fas,
+.restaurant-card .rating-stars .far {
+    color: var(--warning-neon) !important;
+}
+
+.restaurant-card small {
+    color: var(--text-secondary) !important;
+}
+
+/* Location and price text */
+.restaurant-card .text-muted {
+    color: var(--text-secondary) !important;
+}
+
+.restaurant-card .fw-bold {
+    color: var(--text-primary) !important;
+}
+
+/* Featured restaurants section */
+.py-5 h2 {
+    color: var(--text-primary) !important;
+}
+
+/* Food item text fixes */
+.food-item h5 {
+    color: var(--text-primary) !important;
+}
+
+.food-item .card-text {
+    color: var(--text-secondary) !important;
+}
+
+.food-item .h5 {
+    color: var(--primary-neon) !important;
+}
+
+/* General text color enforcement */
+.container h1,
+.container h2,
+.container h3,
+.container h4,
+.container h5,
+.container h6 {
+    color: var(--text-primary) !important;
+}
+
+.container p,
+.container span:not(.badge):not(.rating-stars),
+.container div:not(.btn):not(.badge) {
+    color: var(--text-primary);
+}
+
+/* Table text fixes */
+.table td,
+.table th {
+    color: var(--text-primary) !important;
+}
+
+.table-dark td,
+.table-dark th {
+    color: var(--text-primary) !important;
+}
+
+/* Form label fixes */
+.form-label {
+    color: var(--text-primary) !important;
+    font-weight: 600;
+}
+
+/* Alert text fixes */
+.alert {
+    color: var(--text-primary) !important;
+}
+
+/* Dropdown menu fixes */
+.dropdown-menu {
+    background: var(--dark-surface) !important;
+    border: 1px solid var(--glass-border);
+}
+
+.dropdown-item {
+    color: var(--text-primary) !important;
+    transition: all 0.3s ease;
+}
+
+.dropdown-item:hover {
+    background: var(--glass-bg) !important;
+    color: var(--primary-neon) !important;
+}
+
+/* Ensure all restaurant information is visible */
+.d-flex .fw-bold,
+.d-flex .text-muted,
+.d-flex small {
+    color: var(--text-primary) !important;
+}
+
+/* Rating text specifically */
+.rating-stars span {
+    color: var(--text-primary) !important;
+    margin-left: 0.5rem;
+}
+
+/* Price range and other small text */
+.fw-bold:not(.btn) {
+    color: var(--text-primary) !important;
+}
+
+/* Override any remaining black text */
+* {
+    color: inherit;
+}
+
+*:not(.btn):not(.badge):not(.alert):not(.navbar-brand) {
+    color: var(--text-primary);
+}
+
+/* Specific overrides for elements that might still have dark text */
+.card *:not(.btn):not(.badge) {
+    color: var(--text-primary) !important;
+}
+
+.row *:not(.btn):not(.badge):not(.form-control):not(.form-select) {
+    color: var(--text-primary);
+}
+
+/* Booking card text visibility fixes */
+.booking-card .card-header h5 {
+    color: var(--text-primary) !important;
+}
+
+.booking-card .card-body strong {
+    color: var(--text-primary) !important;
+}
+
+.booking-card .card-body span {
+    color: var(--text-secondary) !important;
+}
+
+.booking-card .card-body small {
+    color: var(--text-secondary) !important;
+}
+
+/* Modal text fixes */
+.modal-body label {
+    color: var(--text-primary) !important;
+}
+
+.modal-body .text-white {
+    color: var(--text-primary) !important;
+}
+
+/* Card header background fix */
+.card-header.bg-light {
+    background: var(--glass-bg) !important;
+    backdrop-filter: blur(var(--blur-amount));
+    border-bottom: 1px solid var(--glass-border);
+}
+
+/* Ensure all booking information is visible */
+.booking-card .row .col-6 strong,
+.booking-card .row .col-6 span {
+    color: var(--text-primary) !important;
+}
+
+/* Notification System */
+.notification-container {
+    position: fixed;
+    top: 2rem;
+    right: 2rem;
+    z-index: 9999;
+    max-width: 400px;
+    width: 100%;
+}
+
+.notification {
+    margin-bottom: 1rem;
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--blur-amount));
+    border: 1px solid var(--glass-border);
+    border-radius: 15px;
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow-dark);
+}
+
+.notification::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--gradient-primary);
+}
+
+.notification-success::before {
+    background: linear-gradient(135deg, var(--success-neon), #00cc77);
+}
+
+.notification-warning::before {
+    background: linear-gradient(135deg, var(--warning-neon), #ffcc00);
+}
+
+.notification-error::before {
+    background: linear-gradient(135deg, var(--danger-neon), #ff4444);
+}
+
+.notification-content {
+    display: flex;
+    align-items: flex-start;
+    padding: 1.5rem;
+    gap: 1rem;
+}
+
+.notification-icon {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+}
+
+.notification-success .notification-icon {
+    background: rgba(0, 255, 136, 0.2);
+    color: var(--success-neon);
+    box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
+}
+
+.notification-warning .notification-icon {
+    background: rgba(255, 170, 0, 0.2);
+    color: var(--warning-neon);
+    box-shadow: 0 0 15px rgba(255, 170, 0, 0.3);
+}
+
+.notification-error .notification-icon {
+    background: rgba(255, 0, 85, 0.2);
+    color: var(--danger-neon);
+    box-shadow: 0 0 15px rgba(255, 0, 85, 0.3);
+}
+
+.notification-text {
+    flex-grow: 1;
+}
+
+.notification-title {
+    color: var(--text-primary);
+    font-weight: 700;
+    font-size: 1rem;
+    margin: 0 0 0.5rem 0;
+}
+
+.notification-message {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.4;
+    margin: 0;
+}
+
+.notification-close {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 0.25rem;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+}
+
+.notification-close:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+    transform: scale(1.1);
+}
+
+/* Notification animations */
+.notification-enter-active {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.notification-leave-active {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.notification-enter-from {
+    opacity: 0;
+    transform: translateX(100%);
+}
+
+.notification-leave-to {
+    opacity: 0;
+    transform: translateX(100%);
+}
+
+.notification-move {
+    transition: transform 0.3s ease;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .notification-container {
+        top: 1rem;
+        right: 1rem;
+        left: 1rem;
+        max-width: none;
+    }
+    
+    .notification-content {
+        padding: 1rem;
+    }
+    
+    .notification-message {
+        font-size: 0.85rem;
+    }
+}
+
+/* Cancel Modal Specific Styling */
+.modal-dialog-centered {
+    display: flex;
+    align-items: center;
+    min-height: calc(100% - 1rem);
+}
+
+.modal-header.bg-danger {
+    background: linear-gradient(135deg, var(--danger-neon), #cc0044) !important;
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.modal-body .fa-calendar-times {
+    color: var(--danger-neon);
+    filter: drop-shadow(0 0 10px var(--danger-neon));
+    animation: warningPulse 2s ease-in-out infinite;
+}
+
+@keyframes warningPulse {
+    0%, 100% { 
+        transform: scale(1); 
+        opacity: 0.8;
+    }
+    50% { 
+        transform: scale(1.05); 
+        opacity: 1;
+        filter: drop-shadow(0 0 20px var(--danger-neon));
+    }
+}
+
+.alert-warning.bg-transparent {
+    background: rgba(255, 170, 0, 0.1) !important;
+    border: 1px solid var(--warning-neon);
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+}
+
+.alert-warning .text-warning {
+    color: var(--warning-neon) !important;
+}
+
+/* Modal backdrop enhancement */
+.modal.d-block {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+}
