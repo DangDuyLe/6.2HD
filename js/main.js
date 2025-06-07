@@ -539,7 +539,15 @@ const apiService = {
                 "https://images.unsplash.com/photo-1533089860892-a7c6f0a88666?w=300&h=200&fit=crop",
                 "https://images.unsplash.com/photo-1526081347037-9ad53d2b43db?w=300&h=200&fit=crop"
             ]
-        }
+        },
+        // Fallback images for when specific categories aren't found
+        fallbackImages: [
+            "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=300&h=200&fit=crop",
+            "https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=300&h=200&fit=crop",
+            "https://images.unsplash.com/photo-1598103442097-8b74394b95c6?w=300&h=200&fit=crop",
+            "https://images.unsplash.com/photo-1482049016688-2d3e1b311543?w=300&h=200&fit=crop",
+            "https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=300&h=200&fit=crop"
+        ]
     },
 
     // Generate consistent index from string for deterministic selection
@@ -553,58 +561,208 @@ const apiService = {
         return Math.abs(hash) % arrayLength;
     },
 
+    // Enhanced image validation function
+    async validateImageUrl(url, timeout = 5000) {
+        return new Promise((resolve) => {
+            const img = new Image();
+            const timer = setTimeout(() => {
+                console.warn(`Image load timeout: ${url}`);
+                resolve(false);
+            }, timeout);
+            
+            img.onload = () => {
+                clearTimeout(timer);
+                resolve(true);
+            };
+            
+            img.onerror = () => {
+                clearTimeout(timer);
+                console.warn(`Image load error: ${url}`);
+                resolve(false);
+            };
+            
+            img.src = url;
+        });
+    },
+
     // Get deterministic food image for restaurants
     async fetchRandomFoodImage(seed) {
         try {
             const images = this.foodImageCollections.restaurants;
             const index = this.generateImageIndex(seed, images.length);
-            return images[index];
+            const selectedImage = images[index];
+            
+            // Validate the image loads
+            const isValid = await this.validateImageUrl(selectedImage);
+            if (isValid) {
+                return selectedImage;
+            } else {
+                console.warn(`Restaurant image failed to load: ${selectedImage}, using fallback`);
+                return this.foodImageCollections.fallbackImages[0];
+            }
         } catch (error) {
             console.warn('Failed to fetch restaurant image:', error);
-            return this.foodImageCollections.restaurants[0]; // Default fallback
+            return this.foodImageCollections.fallbackImages[0];
         }
     },
 
-    // Get deterministic food image for menu items
+    // Enhanced food image fetching with multiple fallbacks
     async fetchFoodImage(dishName, category) {
         try {
             const cleanCategory = category.toLowerCase();
             let images = this.foodImageCollections.menuItems[cleanCategory];
             
-            // If no specific category, use main course images
+            // If no specific category, try to map similar categories
+            if (!images) {
+                const categoryMappings = {
+                    'entree': 'main',
+                    'entrée': 'main',
+                    'mains': 'main',
+                    'starters': 'appetizer',
+                    'app': 'appetizer',
+                    'apps': 'appetizer',
+                    'drinks': 'beverage',
+                    'drink': 'beverage',
+                    'beverages': 'beverage',
+                    'sides': 'side',
+                    'desserts': 'dessert',
+                    'sweet': 'dessert',
+                    'sweets': 'dessert'
+                };
+                
+                const mappedCategory = categoryMappings[cleanCategory];
+                if (mappedCategory) {
+                    images = this.foodImageCollections.menuItems[mappedCategory];
+                }
+            }
+            
+            // Still no images? Use main course images
             if (!images) {
                 images = this.foodImageCollections.menuItems.main;
             }
             
             const index = this.generateImageIndex(dishName + category, images.length);
-            return images[index];
+            const selectedImage = images[index];
+            
+            // Validate the selected image
+            const isValid = await this.validateImageUrl(selectedImage);
+            if (isValid) {
+                console.log(`✅ Image assigned for ${dishName}: ${selectedImage}`);
+                return selectedImage;
+            } else {
+                // Try fallback images
+                console.warn(`❌ Primary image failed for ${dishName}, trying fallback`);
+                const fallbackIndex = this.generateImageIndex(dishName, this.foodImageCollections.fallbackImages.length);
+                const fallbackImage = this.foodImageCollections.fallbackImages[fallbackIndex];
+                
+                const isFallbackValid = await this.validateImageUrl(fallbackImage);
+                if (isFallbackValid) {
+                    console.log(`✅ Fallback image assigned for ${dishName}: ${fallbackImage}`);
+                    return fallbackImage;
+                } else {
+                    console.warn(`❌ Fallback also failed for ${dishName}, using default`);
+                    return this.foodImageCollections.fallbackImages[0];
+                }
+            }
         } catch (error) {
-            console.warn('Failed to fetch food image:', error);
-            return this.foodImageCollections.menuItems.main[0]; // Default fallback
+            console.error(`Failed to fetch food image for ${dishName}:`, error);
+            return this.foodImageCollections.fallbackImages[0];
         }
     },
 
     // Update restaurant images with food-themed images
     async updateRestaurantImages() {
-        for (let i = 0; i < dataStore.restaurants.length; i++) {
-            const restaurant = dataStore.restaurants[i];
-            // Use restaurant name and cuisine for consistent selection
-            const seed = `${restaurant.name}-${restaurant.cuisine}`;
-            restaurant.image = await this.fetchRandomFoodImage(seed);
-        }
-        console.log('Restaurant images updated with curated food images');
+        console.log('🖼️ Updating restaurant images...');
+        const updatePromises = dataStore.restaurants.map(async (restaurant, index) => {
+            try {
+                // Use restaurant name and cuisine for consistent selection
+                const seed = `${restaurant.name}-${restaurant.cuisine}`;
+                restaurant.image = await this.fetchRandomFoodImage(seed);
+                console.log(`✅ Restaurant image updated: ${restaurant.name}`);
+            } catch (error) {
+                console.error(`❌ Failed to update image for restaurant ${restaurant.name}:`, error);
+                restaurant.image = this.foodImageCollections.restaurants[0];
+            }
+        });
+        
+        await Promise.all(updatePromises);
+        console.log('✅ All restaurant images updated with curated food images');
     },
 
-    // Update menu items with food images
+    // Enhanced menu image updating with better error handling
     async updateMenuImages() {
-        console.log('Updating menu item images...');
+        console.log('🍽️ Updating menu item images...');
+        
+        const updatePromises = [];
+        
         for (let restaurant of dataStore.restaurants) {
             for (let menuItem of restaurant.menu) {
-                // Always assign an image, even if one exists (to ensure food-related images)
-                menuItem.image = await this.fetchFoodImage(menuItem.name, menuItem.category);
+                const promise = this.fetchFoodImage(menuItem.name, menuItem.category)
+                    .then(imageUrl => {
+                        menuItem.image = imageUrl;
+                        console.log(`✅ Menu item image updated: ${menuItem.name} -> ${imageUrl}`);
+                    })
+                    .catch(error => {
+                        console.error(`❌ Failed to update image for ${menuItem.name}:`, error);
+                        menuItem.image = this.foodImageCollections.fallbackImages[0];
+                    });
+                
+                updatePromises.push(promise);
             }
         }
-        console.log('Menu item images updated with curated food images');
+        
+        await Promise.all(updatePromises);
+        console.log('✅ All menu item images updated with curated food images');
+        
+        // Force reactivity update
+        dataStore.restaurants = [...dataStore.restaurants];
+    },
+
+    // Add method to fix missing images on demand
+    async fixMissingMenuImages() {
+        console.log('🔧 Checking and fixing missing menu images...');
+        
+        const fixPromises = [];
+        
+        for (let restaurant of dataStore.restaurants) {
+            for (let menuItem of restaurant.menu) {
+                // Check if image is missing or invalid
+                if (!menuItem.image || menuItem.image === '') {
+                    console.log(`🔍 Fixing missing image for: ${menuItem.name}`);
+                    const promise = this.fetchFoodImage(menuItem.name, menuItem.category)
+                        .then(imageUrl => {
+                            menuItem.image = imageUrl;
+                            console.log(`✅ Fixed image for ${menuItem.name}: ${imageUrl}`);
+                        });
+                    fixPromises.push(promise);
+                } else {
+                    // Validate existing image
+                    const isValid = await this.validateImageUrl(menuItem.image);
+                    if (!isValid) {
+                        console.log(`🔍 Replacing invalid image for: ${menuItem.name}`);
+                        const promise = this.fetchFoodImage(menuItem.name, menuItem.category)
+                            .then(imageUrl => {
+                                menuItem.image = imageUrl;
+                                console.log(`✅ Replaced invalid image for ${menuItem.name}: ${imageUrl}`);
+                            });
+                        fixPromises.push(promise);
+                    }
+                }
+            }
+        }
+        
+        if (fixPromises.length > 0) {
+            await Promise.all(fixPromises);
+            console.log(`✅ Fixed ${fixPromises.length} menu item images`);
+            
+            // Save the fixes to localStorage
+            dataStorageService.saveToStorage(dataStorageService.STORAGE_KEYS.RESTAURANTS, dataStore.restaurants);
+            
+            // Force reactivity update
+            dataStore.restaurants = [...dataStore.restaurants];
+        } else {
+            console.log('✅ All menu images are valid');
+        }
     },
 
     // Fetch inspirational quotes for restaurant descriptions
@@ -761,7 +919,7 @@ const apiService = {
 
     // Enhanced data loading method
     async loadAllExternalData() {
-        console.log('Loading all external data...');
+        console.log('🔄 Loading all external data...');
         try {
             await Promise.all([
                 this.updateRestaurantImages(),
@@ -769,9 +927,15 @@ const apiService = {
                 this.enhanceRestaurantDescriptions(),
                 this.fetchWeatherData()
             ]);
+            
+            // After initial load, fix any missing images
+            await this.fixMissingMenuImages();
+            
             console.log('✅ All external data loaded successfully');
         } catch (error) {
             console.error('❌ Error loading external data:', error);
+            // Even if some external data fails, try to fix missing images
+            await this.fixMissingMenuImages();
         }
     }
 };
@@ -1660,7 +1824,7 @@ const RestaurantDetailComponent = {
                                                 v-model="bookingForm.guests"
                                                 min="1"
                                                 max="20"
-                                                                                               required>
+                                                required>
                                             <div v-if="bookingErrors.guests" class="invalid-feedback">
                                                 {{ bookingErrors.guests }}
                                             </div>
